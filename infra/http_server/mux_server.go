@@ -15,7 +15,7 @@ type muxHttpServer struct{ Server mux.Router }
 
 func (httpServer *muxHttpServer) On(route string, method string, handler func(body HttpRequest) HttpResponse) {
 	httpServer.Server.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
-		var request HttpRequest
+		request := HttpRequest{Params: mux.Vars(r)}
 		json.NewDecoder(r.Body).Decode(&request.Body)
 		response := handler(request)
 		w.Header().Set("Content-Type", "application/json")
